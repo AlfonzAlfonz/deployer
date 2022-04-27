@@ -1,0 +1,8 @@
+{
+  "releases": "./releases",
+  "current": "./current",
+  "repo": "git@github.com:AlfonzAlfonz/deployer.git",
+  "branch": "main",
+  "deploy": "bash deploy.sh",
+  "limit": 3
+}

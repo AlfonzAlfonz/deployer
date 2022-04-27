@@ -2,7 +2,6 @@
 import { fs, path, cd, $, chalk, quiet } from "zx";
 
 const start = Date.now();
-
 const cwd = process.cwd();
 
 interface Config {
@@ -10,17 +9,20 @@ interface Config {
   current: string;
   repo: string;
   branch?: string;
-  deploy: string;
-  limit: number;
+
+  build: string;
+  afterSuccess: string;
+
+  maxCount: number;
 }
 
 const emptyConfig: Partial<Config> = {
   releases: "./releases",
   current: "./current",
-  limit: 3
+  maxCount: 3
 };
-const configPath = path.resolve(cwd, "deploy-man.json");
-const { releases, current, repo, deploy, branch, limit } = {
+const configPath = path.resolve(cwd, "deployer.json");
+const { releases, current, repo, build, branch, maxCount, afterSuccess } = {
   ...emptyConfig,
   ...await fs.readJSON(path.resolve(cwd, "deploy-man.json"), { throws: false }).catch(e => {
     console.error(chalk.red("Config file not found"));
@@ -47,6 +49,8 @@ console.info();
 
 await fs.mkdir(releaseDir, { recursive: true });
 
+let success = false;
+
 try {
   cd(releaseDir);
 
@@ -54,13 +58,15 @@ try {
 
   await $`git clone --depth 1 ${branch ? ["-b", `${branch}`] : ""} ${repo} .`;
 
-  console.info(chalk.green("\n[Running deploy script]"));
+  console.info(chalk.green("\n[Running build script]"));
 
-  await $([deploy] as any);
+  await $([build] as any);
 
   console.info(chalk.green("\n[Creating symlink]"));
   await fs.rm(path.resolve(cwd, current), { recursive: true, force: true });
   await fs.symlink(releaseDir, path.resolve(cwd, current));
+
+  success = true;
 } catch (e) {
   console.error(chalk.black(chalk.bgRed("\nBuild failed\n")));
   console.info(e);
@@ -72,10 +78,15 @@ console.info(chalk.green("\n[Removing old releases]"));
 await fs.readdir(releasesDir)
   .then(x => x
     .sort()
-    .slice(0, x.length <= limit ? 0 : limit - 2)
+    .slice(0, x.length <= maxCount ? 0 : maxCount - 2)
     .forEach(r => {
       fs.rm(path.resolve(releasesDir, r), { recursive: true, force: true });
     })
   );
+
+if (success) {
+  console.info(chalk.green("\n[Running afterSuccess script]"));
+  await $([afterSuccess] as any);
+}
 
 console.info(`\nDone in ${((Date.now() - start) / 1000).toFixed(2)}s. `);
