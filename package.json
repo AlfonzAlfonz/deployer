@@ -1,0 +1,28 @@
+{
+  "name": "@alfonz/deployer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "zx": "^6.1.0"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-specifier-resolution=node --loader ts-node/esm index.ts",
+    "build": "tsc -p tsconfig.json --excludeFiles ./.eslintrc.js"
+  },
+  "bin": "./index.js",
+  "devDependencies": {
+    "ts-node": "^10.7.0",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
+    "eslint": "^7.20.0",
+    "eslint-config-alfonz": "^0.3.0",
+    "eslint-config-next": "^11.1.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "typescript": "^4.6.3"
+  }
+}
