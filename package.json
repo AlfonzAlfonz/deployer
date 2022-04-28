@@ -1,7 +1,8 @@
 {
   "name": "@alfonz/deployer",
-  "version": "1.0.0",
-  "main": "index.js",
+  "private": false,
+  "version": "1.0.3",
+  "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
     "eslint-plugin-react": "^7.29.4",
@@ -13,7 +14,7 @@
     "start": "node --experimental-specifier-resolution=node --loader ts-node/esm index.ts",
     "build": "tsc -p tsconfig.json --excludeFiles ./.eslintrc.js"
   },
-  "bin": "./index.js",
+  "bin": "./dist/index.js",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",

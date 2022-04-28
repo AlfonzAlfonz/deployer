@@ -34,11 +34,11 @@ Deployer by default creates a `./releases` directory with release folders and cr
 
 | Name      | Default Value | Description                                   |
 |-----------|---------------|-----------------------------------------------|
+| repo      |               | Repo uri **(required)**                       |
 | releases  | './releases'  | Folder containing release folders             |
 | current   | './current'   | Symlink to current release                    |
-| repo      |               | Repo uri **(required)**                       |
 | branch    |               | Branch name                                   |
-| build     |               | Build command **(required)**                  |
+| build     |               | Build command                                 |
 | onSuccess |               | Command which is ran after successful release |
 | maxCount  | 3             | Max count of releases in releases folder      |
 
