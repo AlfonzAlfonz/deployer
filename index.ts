@@ -10,8 +10,8 @@ interface Config {
   repo: string;
   branch?: string;
 
-  build: string;
-  afterSuccess: string;
+  build?: string;
+  afterSuccess?: string;
 
   maxCount: number;
 }
@@ -24,7 +24,7 @@ const emptyConfig: Partial<Config> = {
 const configPath = path.resolve(cwd, "deployer.json");
 const { releases, current, repo, build, branch, maxCount, afterSuccess } = {
   ...emptyConfig,
-  ...await fs.readJSON(path.resolve(cwd, "deploy-man.json"), { throws: false }).catch(e => {
+  ...await fs.readJSON(configPath, { throws: false }).catch(e => {
     console.error(chalk.red("Config file not found"));
     process.exit(1);
   }) as Config
@@ -41,7 +41,7 @@ const id = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-$
 const releaseDir = path.resolve(cwd, releasesDir, id);
 
 console.info(chalk.green("\n[Starting new release]"));
-console.info(`config: ${fs.existsSync(configPath) ? configPath : "not found"}`);
+console.info(`config: ${configPath}`);
 console.info(`id: ${id}`);
 console.info(`repo: ${repo}`);
 branch && console.info(`branch: ${branch}`);
@@ -60,7 +60,7 @@ try {
 
   console.info(chalk.green("\n[Running build script]"));
 
-  await $([build] as any);
+  build && await $([build] as any);
 
   console.info(chalk.green("\n[Creating symlink]"));
   await fs.rm(path.resolve(cwd, current), { recursive: true, force: true });
@@ -86,7 +86,7 @@ await fs.readdir(releasesDir)
 
 if (success) {
   console.info(chalk.green("\n[Running afterSuccess script]"));
-  await $([afterSuccess] as any);
+  afterSuccess && await $([afterSuccess] as any);
 }
 
 console.info(`\nDone in ${((Date.now() - start) / 1000).toFixed(2)}s. `);
