@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { fs, path, cd, $, chalk, quiet } from "zx";
+import { fs, path, cd, $, chalk } from "zx";
 
 const start = Date.now();
 const cwd = process.cwd();
@@ -21,7 +21,8 @@ const emptyConfig: Partial<Config> = {
   current: "./current",
   maxCount: 3
 };
-const configPath = path.resolve(cwd, "deployer.json");
+
+const configPath = path.resolve(cwd, process.argv[2] ?? "deployer.json");
 const { releases, current, repo, build, branch, maxCount, afterSuccess } = {
   ...emptyConfig,
   ...await fs.readJSON(configPath, { throws: false }).catch(e => {

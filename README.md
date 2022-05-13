@@ -18,7 +18,7 @@ Create `deployer.json` config file in server directory:
 ```json
 {
   "repo": "git@github.com:AlfonzAlfonz/deployer.git",
-  "deploy": "bash deploy.sh"
+  "build": "bash deploy.sh"
 }
 ```
 
@@ -49,7 +49,7 @@ Deployer by default creates a `./releases` directory with release folders and cr
   "current": "./current",
   "repo": "git@github.com:AlfonzAlfonz/deployer.git",
   "branch": "main",
-  "deploy": "bash deploy.sh",
+  "build": "bash deploy.sh",
   "limit": 3
 }
 ```
