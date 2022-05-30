@@ -45,6 +45,7 @@ console.info(chalk.green("\n[Starting new release]"));
 console.info(`config: ${configPath}`);
 console.info(`id: ${id}`);
 console.info(`repo: ${repo}`);
+console.info(`releaseDir: ${releaseDir}`);
 branch && console.info(`branch: ${branch}`);
 console.info();
 
@@ -88,6 +89,9 @@ await fs.readdir(releasesDir)
 if (success) {
   console.info(chalk.green("\n[Running afterSuccess script]"));
   afterSuccess && await $([afterSuccess] as any);
-}
 
-console.info(`\nDone in ${((Date.now() - start) / 1000).toFixed(2)}s. `);
+  console.info(`\nDone in ${((Date.now() - start) / 1000).toFixed(2)}s. `);
+} else {
+  console.info(`\nFailed in ${((Date.now() - start) / 1000).toFixed(2)}s. `);
+  process.exit(1);
+}
